@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import csv
 
 driver = webdriver.Chrome()
 res = []
@@ -29,9 +30,6 @@ def scrape_charity_info(charity_pages):
         
         driver.get(charity)
         
-        charity_id += 1
-        charity_info["id"] = charity_id
-        
         soup = BeautifulSoup(driver.page_source, "html.parser")
         soup = remove_scripts(soup)
 
@@ -45,6 +43,8 @@ def scrape_charity_info(charity_pages):
                 continue
             
             # create dictionary of charity info
+            charity_id += 1
+            charity_info["id"] = charity_id
             charity_info["charity_name"] = soup.find("h1", class_="sppb-addon-title").text.strip()
             charity_info["logo"] = soup.find("div", id="logo").find("img").get("src")
             charity_info["rating"] = star
@@ -86,7 +86,15 @@ def main():
         start += 20
         
     scrape_charity_info(charity_pages)
+    
     driver.quit()
+    
+    keys = res[0].keys()
+
+    with open('raw_data.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(res)
 
 if __name__ == "__main__":
     main()
