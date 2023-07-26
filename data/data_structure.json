@@ -1,0 +1,37 @@
+{
+  "charities": {
+    "1" : {
+      "name": "Feed Ontario",
+      "logo": "https://www.charityintelligence.ca/media/charity_logos/Feed-Ontario-Logo-Colour.png",
+      "rating": "5",
+      "financial_transparency": 80,
+      "results_reporting": 70,
+      "cents_to_cause": 95,
+      "city": "Toronto",
+      "province": "Ontario",
+      "website": "www.feedontario.ca",
+      "telephone": "416-656-4100",
+      "category": "Social Services",
+      "subcategory": "Food Bank",
+      "overview": "Feed Ontario is a ...",
+      "results_and_impact": "The charity reports distributing 8,188,407 lb of food..."
+    }
+  },
+  "users": {
+    "1": {
+      "name": "John Doe",
+      "email": "johndoe@gmail.com",
+      "password": "*****",
+      "categories": ["Social Services, Education, Health"],
+      "subcategories": ["Women, Food Bank, University"],
+      "health_categories": ["Diabetes", "Mental Health"],
+      "rankings": {"financial_transparency": 2, "results_reporting": 3, "cents_to_cause": 1},
+      "location_preference": "city",
+      "province": "Ontario",
+      "city": "Toronto",
+      "volunteer": "yes",
+      "matched_charities": [1, 4, 10],
+      "donated_to": [{"charity_id": 1, "amount": 100, "date": 07-24-2023}]
+    }
+  }
+}
