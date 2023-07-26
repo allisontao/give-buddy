@@ -31,7 +31,7 @@
       "city": "Toronto",
       "volunteer": "yes",
       "matched_charities": [1, 4, 10],
-      "donated_to": [{"charity_id": 1, "amount": 100, "date": 07-24-2023}]
+      "donated_to": [{"charity_id": 1, "amount": 100, "date": "07-24-2023"}]
     }
   }
 }
