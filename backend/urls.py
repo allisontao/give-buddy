@@ -19,5 +19,6 @@ from givebuddy import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('charities/', views.charities, name='charities'),
+    path('charities/<str:charity_id>/', views.specific_charity, name='specific_charity'),
 ]
