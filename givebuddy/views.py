@@ -20,6 +20,10 @@ firebase=pyrebase.initialize_app(config)
 authe = firebase.auth()
 database=firebase.database()
 
+# Landing
+def index(request):
+    return render(request, 'index.html')
+
 # Charities Endpoints
 @api_view(['GET'])
 # Returns list of all charities
