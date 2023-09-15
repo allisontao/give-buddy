@@ -4,6 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 # firebase imports
 import pyrebase
+# matching algorithm import
+from backend.scripts.matching_algorithm import match_charities
 
 config={
     "apiKey": "AIzaSyD0mEZexgDrJgkZGscEmJtc9BdGdg1U95U",
@@ -58,3 +60,14 @@ def specific_charity(request, charity_id):
             return Response({"error": "Charity data is empty"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+@api_view(['POST'])
+# Request body contains user selection and returns matched charities
+def onboarding(request):
+    user_selections = database.child('user').child('catgories', 'subcategories', 'rankings').get()
+
+    if user_selections:
+        user_matched_charities = match_charities(user_selections)
+        return Response(user_matched_charities)
+    else:
+        return Response({"error": "User selections not found"}, status=404)
