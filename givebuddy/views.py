@@ -1,21 +1,25 @@
+# framework imports
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from decouple import config 
 # firebase imports
 import pyrebase
-# matching algorithm import
+# file imports
 from backend.scripts.matching_algorithm import match_charities
+from .models import User
+from .serializers import User_serializer
 
 config={
-    "apiKey": "AIzaSyD0mEZexgDrJgkZGscEmJtc9BdGdg1U95U",
-    "authDomain": "give-buddy.firebaseapp.com",
-    "databaseURL": "https://give-buddy-default-rtdb.firebaseio.com",
-    "projectId": "give-buddy",
-    "storageBucket": "give-buddy.appspot.com",
-    "messagingSenderId": "1021594813511",
-    "appId": "1:1021594813511:web:d7ccae2dbd4c915d2f5d62",
-    "measurementId": "G-KZXS7KCXPM"
+    "apiKey": config("apiKey"),
+    "authDomain": config("authDomain"),
+    "databaseURL": config("databaseURL"),
+    "projectId": config("projectId"),
+    "storageBucket": config("storageBucket"),
+    "messagingSenderId": config("messagingSenderId"),
+    "appId": config("appId"),
+    "measurementId": config("measurementId")
 }
 
 firebase=pyrebase.initialize_app(config)
@@ -64,10 +68,21 @@ def specific_charity(request, charity_id):
 @api_view(['POST'])
 # Request body contains user selection and returns matched charities
 def onboarding(request):
-    user_selections = database.child('user').child('catgories', 'subcategories', 'rankings').get()
+    serializer = User_serializer(data=request.data)
+    if serializer.is_valid():
+        user_data = serializer.validated_data
 
-    if user_selections:
-        user_matched_charities = match_charities(user_selections)
+        charity_list = database.child('charities').get()
+        
+        user_selections = {
+            'categories': user_data['categories'],
+            'subcategories': user_data['subcategories'],
+            'ft_ranking': user_data['ft_ranking'],
+            'rr_ranking': user_data['rr_ranking'],
+            'ctc_ranking': user_data['ctc_ranking'],
+            'charity_list': charity_list
+        }
+        user_matched_charities = match_charities(**user_selections)
         return Response(user_matched_charities)
     else:
         return Response({"error": "User selections not found"}, status=404)
