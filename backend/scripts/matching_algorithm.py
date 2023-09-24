@@ -1,4 +1,4 @@
-def match_charities(categories, subcategories, ft_ranking, rr_ranking, ctc_ranking, charities):
+def match_charities(ft_ranking, rr_ranking, ctc_ranking, charities, categories = [], subcategories = []):
     ranking_map = {1: 1.5, 2: 1.0, 3: 0.5}
     matched_charities = []
     # {charity id : score}
@@ -20,10 +20,9 @@ def match_charities(categories, subcategories, ft_ranking, rr_ranking, ctc_ranki
         matched_charities.append(charity)
     
     for charity in matched_charities:
-        score = ft_ranking_weight*45 + rr_ranking_weight*50 + ctc_ranking_weight*60
-        charity_scores[len(charity['name'])] = score
-        
-    print(charity_scores)
+        score = ft_ranking_weight*charity['financial_transparency_score'] + rr_ranking_weight*charity['results_reporting_score'] + ctc_ranking_weight*charity['cents_to_cause_score']
+        charity_scores[charity['id']] = score
+
     # return list of charity ids in the sorted order of matches
     sorted_matches = sorted(charity_scores, key=charity_scores.get, reverse=True)
     return sorted_matches
