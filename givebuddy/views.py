@@ -9,7 +9,7 @@ import pyrebase
 # file imports
 from backend.scripts.matching_algorithm import match_charities
 from .models import User
-from .serializers import User_serializer
+from .serializers import Onboarding_serializer
 
 config={
     "apiKey": config("apiKey"),
@@ -68,19 +68,18 @@ def specific_charity(request, charity_id):
 @api_view(['POST'])
 # Request body contains user selection and returns matched charities
 def onboarding(request):
-    serializer = User_serializer(data=request.data)
+    #validate request data before calling matching algorithm using serializer
+    serializer = Onboarding_serializer(data=request.data)
     if serializer.is_valid():
         user_data = serializer.validated_data
-
-        charity_list = database.child('charities').get()
-        
+        charity_list = database.child('charities').get().val()
         user_selections = {
             'categories': user_data['categories'],
             'subcategories': user_data['subcategories'],
             'ft_ranking': user_data['ft_ranking'],
             'rr_ranking': user_data['rr_ranking'],
             'ctc_ranking': user_data['ctc_ranking'],
-            'charity_list': charity_list
+            'charities': charity_list
         }
         user_matched_charities = match_charities(**user_selections)
         return Response(user_matched_charities)
