@@ -82,6 +82,11 @@ def onboarding(request):
             'charities': charity_list
         }
         user_matched_charities = match_charities(**user_selections)
-        return Response(user_matched_charities)
+        matched_charities_json = {
+            'user_matched_charities': user_matched_charities
+        }
+        
+        return Response(matched_charities_json)
+        # return Response(user_matched_charities)
     else:
         return Response({"error": "User selections not found"}, status=404)
