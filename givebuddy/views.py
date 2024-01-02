@@ -91,3 +91,21 @@ def onboarding(request):
         # return Response(user_matched_charities)
     else:
         return Response({"error": "User selections not found"}, status=404)
+    
+@api_view(['GET'])
+# Return all favourite charities
+def my_charities(request, user_id):
+    try:
+        ref = database.child('users').child(user_id).get()
+    
+        if ref is not None:
+            user_data = ref.val()
+            if user_data:
+                fav = user_data.get('fav_charities')
+                return Response(fav)
+            else:
+                return Response({"error": "No Favourite Charity data for User"}, status=404)
+        else:
+            return Response({"error": "User data is empty"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
