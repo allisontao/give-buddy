@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.index, name='landing'),
     path('charities/', views.charities, name='charities'),
     path('charities/<str:charity_id>/', views.specific_charity, name='specific_charity'),
-    path('onboarding', views.onboarding, name='onboarding')
+    path('onboarding', views.onboarding, name='onboarding'),
+    path('my_charities/<str:user_id>', views.my_charities, name='my_charities')
 ]
