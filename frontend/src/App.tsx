@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Home from './page/Home';
 import Signup from './page/Signup';
 import Login from './page/Login';
+import Landing from './page/Landing/Landing';
 import { BrowserRouter as Router} from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
  
@@ -11,7 +12,7 @@ function App() {
       <div>
         <section>                              
             <Routes>                                                                        
-              <Route path="/" element={<Home/>}/>
+              <Route path="/" element={<Landing/>}/>
               <Route path="/home" element={<Home/>}/>
               <Route path="/signup" element={<Signup/>}/>
               <Route path="/login" element={<Login/>}/>
