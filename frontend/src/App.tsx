@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import Home from './page/Home';
+import Home from './page/Home/Home';
 import Signup from './page/Signup/Signup';
 import Login from './page/Login/Login';
 import Landing from './page/Landing/Landing';
+import Onboarding from './page/Onboarding/Onboarding';
 import { BrowserRouter as Router} from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
  
@@ -16,6 +17,7 @@ function App() {
               <Route path="/home" element={<Home/>}/>
               <Route path="/signup" element={<Signup/>}/>
               <Route path="/login" element={<Login/>}/>
+              <Route path="/onboarding" element={<Onboarding/>}/>
             </Routes>                    
         </section>
       </div>
