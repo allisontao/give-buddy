@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import "./Onboarding.css"
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
+import StepThree from './StepThree';
+import StepFour from './StepFour';
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -27,8 +29,8 @@ const Onboarding = () => {
     switch(curStep) {
       case 1:   return <StepOne />;
       case 2:   return <StepTwo />;
-      // case "three": return <ComponentC />;
-      // case "four":  return <ComponentD />;
+      case 3: return <StepThree />;
+      case 4:  return <StepFour />;
       default:      return <h1>No project match</h1>
     }
   }
