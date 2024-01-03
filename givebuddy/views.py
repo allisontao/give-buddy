@@ -93,7 +93,7 @@ def onboarding(request):
         return Response({"error": "User selections not found"}, status=404)
     
 @api_view(['GET'])
-# Return all favourite charities
+# Return all favourite charities user liked/saved
 def my_charities(request, user_id):
     try:
         ref = database.child('users').child(user_id).get()
@@ -109,3 +109,22 @@ def my_charities(request, user_id):
             return Response({"error": "User data is empty"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+    
+@api_view(['GET'])
+# Return all charities user donated to
+def my_donated_charities(request, user_id):
+    try:
+        ref = database.child('users').child(user_id).get()
+
+        if ref is not None:
+            user_data = ref.val()
+            if user_data:
+                donated = user_data.get('donated_to')
+                return Response(donated)
+            else:
+                return Response({"error": "No Favourite Charity data for User"}, status=404)
+        else:
+            return Response({"error": "User data is empty"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
