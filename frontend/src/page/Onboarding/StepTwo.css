@@ -1,0 +1,17 @@
+#onboarding-step-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#onboarding-step-two-button {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform:capitalize;
+  color: #4E4E4E;
+  border-radius: 12px;
+  border: 1px solid #BEBEBE;
+  padding: 20px;
+  margin: 8px;
+}
