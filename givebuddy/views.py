@@ -10,6 +10,7 @@ import pyrebase
 from backend.scripts.matching_algorithm import match_charities
 from .models import User
 from .serializers import Onboarding_serializer
+from .serializers import Updated_donated_charities_serializer
 
 config={
     "apiKey": config("apiKey"),
@@ -72,7 +73,7 @@ def onboarding(request):
     serializer = Onboarding_serializer(data=request.data)
     if serializer.is_valid():
         user_data = serializer.validated_data
-        charity_list = database.child('charities').get().val()
+        # charity_list = database.child('charities').get().val()
         user_selections = {
             'categories': user_data['categories'],
             'subcategories': user_data['subcategories'],
@@ -122,9 +123,30 @@ def my_donated_charities(request, user_id):
                 donated = user_data.get('donated_to')
                 return Response(donated)
             else:
-                return Response({"error": "No Favourite Charity data for User"}, status=404)
+                return Response({"error": "No Donated Charity data for User"}, status=404)
         else:
             return Response({"error": "User data is empty"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-    
+
+@api_view(['POST'])
+# update user's donated to list
+def update_donated_charities(request, user_id):
+    try:
+        update_donated_serializer = Updated_donated_charities_serializer(data=request.data)
+        # validate request data before updating database using serializer
+        if update_donated_serializer.is_valid():
+            # obtain user's current donated to list
+            current_list = database.child('users').child(user_id).child('donated_to').get().val() or []
+            # user input
+            insert_id = update_donated_serializer.validated_data.get('donated_charity_id')
+            insert_amount = update_donated_serializer.validated_data.get('donated_amount')
+            insert_list = [insert_id, insert_amount]
+            final_list = current_list + [insert_list]
+            # update database
+            database.child('users').child(user_id).child('donated_to').set(final_list)
+            return Response({'donated_to': final_list})
+        else:
+            return Response(update_donated_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

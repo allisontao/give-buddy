@@ -8,3 +8,7 @@ class Onboarding_serializer(serializers.Serializer):
     rr_ranking = serializers.IntegerField(min_value=1)
     ctc_ranking = serializers.IntegerField(min_value=1)
     charities = serializers.ListField(max_length=255)
+
+class Updated_donated_charities_serializer(serializers.Serializer):
+    donated_charity_id = serializers.IntegerField(min_value=1)
+    donated_amount = serializers.IntegerField(min_value=1)
