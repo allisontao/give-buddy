@@ -68,30 +68,33 @@ def specific_charity(request, charity_id):
 
 @api_view(['POST'])
 # Request body contains user selection and returns matched charities
-def onboarding(request):
+def onboarding(request, user_id):
+    try:
     #validate request data before calling matching algorithm using serializer
-    serializer = Onboarding_serializer(data=request.data)
-    if serializer.is_valid():
-        user_data = serializer.validated_data
-        # charity_list = database.child('charities').get().val()
-        user_selections = {
-            'categories': user_data['categories'],
-            'subcategories': user_data['subcategories'],
-            'ft_ranking': user_data['ft_ranking'],
-            'rr_ranking': user_data['rr_ranking'],
-            'ctc_ranking': user_data['ctc_ranking'],
-            # TODO: change this back to the charities from charity database after the database is set up
-            'charities': user_data['charities']
-        }
-        user_matched_charities = match_charities(**user_selections)
-        matched_charities_json = {
-            'user_matched_charities': user_matched_charities
-        }
-        
-        return Response(matched_charities_json)
-        # return Response(user_matched_charities)
-    else:
-        return Response({"error": "User selections not found"}, status=404)
+        serializer = Onboarding_serializer(data=request.data)
+        if serializer.is_valid():
+            user_data = serializer.validated_data
+            # charity_list = database.child('charities').get().val()
+            user_selections = {
+                'categories': user_data['categories'],
+                'subcategories': user_data['subcategories'],
+                'ft_ranking': user_data['ft_ranking'],
+                'rr_ranking': user_data['rr_ranking'],
+                'ctc_ranking': user_data['ctc_ranking'],
+                # TODO: change this back to the charities from charity database after the database is set up
+                'charities': user_data['charities']
+            }
+            user_matched_charities = match_charities(**user_selections)
+            matched_charities_json = {
+                'user_matched_charities': user_matched_charities
+            }
+            # update matched charity info into the database
+            database.child('users').child(user_id).child('matched_charities').set(user_matched_charities)
+            return Response(matched_charities_json)
+        else:
+            return Response({"error": "User selections not found"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
     
 @api_view(['GET'])
 # Return all favourite charities user liked/saved
