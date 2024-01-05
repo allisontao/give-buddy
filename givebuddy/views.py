@@ -66,6 +66,7 @@ def specific_charity(request, charity_id):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
+# Onboarding Endpoint
 @api_view(['POST'])
 # Request body contains user selection and returns matched charities
 def onboarding(request, user_id):
@@ -96,6 +97,7 @@ def onboarding(request, user_id):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
     
+# My Charities Endpoints
 @api_view(['GET'])
 # Return all favourite charities user liked/saved
 def my_charities(request, user_id):
@@ -151,5 +153,30 @@ def update_donated_charities(request, user_id):
             return Response({'donated_to': final_list})
         else:
             return Response(update_donated_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+# For You Endpoint   
+@api_view(['GET'])
+# Return list of matched charities in groups of 5
+def matched_for_you(request, user_id):
+    try:
+        match_param = request.query_params.get('match', 0)
+        match = int(match_param)
+
+        ref = database.child('users').child(user_id).get()
+
+        if ref is not None:
+            user_data = ref.val()
+            if user_data:
+                matched = user_data.get('matched_charities', [])
+                start_index = match * 5
+                end_index = (match * 5 + 4) + 1
+                matched_group = matched[start_index:end_index]
+                return Response(matched_group)
+            else:
+                return Response({"error": "No Matched Charity data for User"}, status=404)
+        else:
+            return Response({"error": "User data is empty"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
