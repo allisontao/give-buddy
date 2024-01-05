@@ -4,38 +4,24 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from decouple import config 
+import os
 # firebase imports
 import pyrebase
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from firebase_admin import initialize_app
 # file imports
 from backend.scripts.matching_algorithm import match_charities
 from .models import User
 from .serializers import Onboarding_serializer
 from .serializers import Updated_donated_charities_serializer
 
-config={
-    "apiKey": config("apiKey"),
-    "authDomain": config("authDomain"),
-    "databaseURL": config("databaseURL"),
-    "projectId": config("projectId"),
-    "storageBucket": config("storageBucket"),
-    "messagingSenderId": config("messagingSenderId"),
-    "appId": config("appId"),
-    "measurementId": config("measurementId")
-}
-
-cred = credentials.Certificate("./ServiceAccountKey.json")
-app = firebase_admin.initialize_app(cred)
-db = firestore.client()
-
-# cred = credentials.ApplicationDefault()
-# app = firebase_admin.initialize_app(config)
-# database = firestore.client()
-# authe = firebase.auth()
-# database=firebase.database()
-
+# Config 
+data = os.path.abspath(os.path.dirname(__file__)) + "/ServiceAccountKey.json"
+cred = credentials.Certificate(data)
+default_app = initialize_app(cred)
+database = firestore.client()
 
 # Landing
 def index(request):
@@ -46,9 +32,14 @@ def index(request):
 # Returns list of all charities
 def charities(request):
     try:
-        charity_list = database.child('charities').get().val()
+        # access charities collection in firestore
+        collection_ref = database.collection('charities')
+        charities = collection_ref.stream()
+
+        # convert to list of dictionaries
+        charity_list = [charity.to_dict() for charity in charities]
         
-        if charity_list is not None:
+        if charity_list:
             context = {
                 'charity_list': charity_list
             }
@@ -63,14 +54,14 @@ def charities(request):
 # Returns specified charity based on charity id
 def specific_charity(request, charity_id):
     try:
-        ref = database.child('charities').child(charity_id).get()
-    
-        if ref is not None:
-            charity_data = ref.val()
-            if charity_data:
-                return Response(charity_data)
-            else:
-                return Response({"error": "Charity data is empty"}, status=404)
+        # access charity collection
+        collection_ref = database.collection('charities')
+        # retrive specific charity
+        doc_ref = collection_ref.document(charity_id)
+        charity_data = doc_ref.get().to_dict()
+        print("THIS IS THE DATA", charity_data)
+        if charity_data:
+            return Response(charity_data)
         else:
             return Response({"error": "Charity data is empty"}, status=404)
     except Exception as e:
