@@ -23,9 +23,15 @@ const Onboarding = () => {
       setCurSubcategory(newSubcategory)
     }
     else if (curStep === 2 && curSubcategroy === 0){
-      const newStep = curStep + 1
-      setCurStep(newStep)
-      setCurSubcategory(0)
+      if(category.length === 0){
+        const newStep = curStep + 2
+        setCurStep(newStep)
+      }
+      else {
+        const newStep = curStep + 1
+        setCurStep(newStep)
+        setCurSubcategory(0)
+      }
     }
     else {
       const newStep = curStep + 1
@@ -45,9 +51,15 @@ const Onboarding = () => {
       return
     }
     else if(curStep === 4){
-      const newStep = curStep - 1
-      setCurStep(newStep)
-      setCurSubcategory(category.length - 1)
+      if(category.length === 0){
+        const newStep = curStep - 2
+        setCurStep(newStep)
+      }
+      else {
+        const newStep = curStep - 1
+        setCurStep(newStep)
+        setCurSubcategory(category.length - 1)
+      }
     }
     else {
       const newStep = curStep - 1
