@@ -1,0 +1,38 @@
+#onboarding-step-one {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+#onboarding-step-one-select {
+  width: 50px;
+}
+
+#onboarding-step-one-description-container {
+  width: 500px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #BEBEBE;
+  background: #FFF;
+  margin: 20px;
+}
+
+#onboarding-step-one-title {
+  color: #4E4E4E;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+}
+
+#onboarding-step-one-description {
+  color: #4E4E4E;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 0;
+}
