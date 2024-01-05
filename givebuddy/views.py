@@ -11,6 +11,7 @@ from backend.scripts.matching_algorithm import match_charities
 from .models import User
 from .serializers import Onboarding_serializer
 from .serializers import Updated_donated_charities_serializer
+from .serializers import User_serializer
 
 config={
     "apiKey": config("apiKey"),
@@ -82,7 +83,6 @@ def onboarding(request, user_id):
                 'ft_ranking': user_data['ft_ranking'],
                 'rr_ranking': user_data['rr_ranking'],
                 'ctc_ranking': user_data['ctc_ranking'],
-                # TODO: change this back to the charities from charity database after the database is set up
                 'charities': user_data['charities']
             }
             user_matched_charities = match_charities(**user_selections)
@@ -178,5 +178,29 @@ def matched_for_you(request, user_id):
                 return Response({"error": "No Matched Charity data for User"}, status=404)
         else:
             return Response({"error": "User data is empty"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
+# User Registration Endpoint
+@api_view(['POST'])
+# Create entry in the user table
+def user_registration(request):
+    try:
+        serializer = User_serializer(data=request.data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            # request data
+            new_user = {
+                'user_uid': validated_data['user_uid'],
+                'first_name': validated_data['first_name'],
+                'last_name': validated_data['last_name'],
+                'email': validated_data['email']
+            }
+
+            user_ref = database.child('users').push(new_user)
+            created_user = database.child('users').child(user_ref['name']).get().val()
+            return Response(created_user)
+        else:
+            return Response({"error": serializer.errors}, status=400)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
