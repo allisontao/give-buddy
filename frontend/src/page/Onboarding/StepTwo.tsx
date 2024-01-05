@@ -34,12 +34,12 @@ const StepTwo = () => {
       {categories.map((category) => {
         return (
           <Button 
-            variant={selectCategory.includes(category) ? "contained": "outlined"} 
+            variant={selectCategory.includes(category.name) ? "contained": "outlined"} 
             id="onboarding-step-two-button" 
-            onClick={() => handleClick(category)}
-            style={{color: selectCategory.includes(category) ? "white" : "#4E4E4E", backgroundColor: selectCategory.includes(category) ? "#254139": "white"}}
+            onClick={() => handleClick(category.name)}
+            style={{color: selectCategory.includes(category.name) ? "white" : "#4E4E4E", backgroundColor: selectCategory.includes(category.name) ? "#254139": "white"}}
           >
-            {category}
+            {category.name}
           </Button>
         )
       })}

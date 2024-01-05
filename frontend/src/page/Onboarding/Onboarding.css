@@ -22,6 +22,7 @@
   font-weight: 500;
   line-height: normal;
   width: 80%;
+  margin-bottom: 0;
 }
 
 #onboarding-page-left-description {
@@ -60,6 +61,8 @@
   flex-direction: column;
   align-items: center;
   width: 60%;
+  overflow-y: auto;
+  height: calc(100vh - 60px);
 }
 
 #onboarding-page-next-link {

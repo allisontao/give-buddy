@@ -1,6 +1,7 @@
 #onboarding-step-two {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  font-family: sans-serif;
 }
 
 #onboarding-step-two-button {
