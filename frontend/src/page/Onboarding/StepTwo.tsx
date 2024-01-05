@@ -10,7 +10,7 @@ const StepTwo = () => {
     (state) => [state.category, state.updateCategory]
   )
 
-  const [selectCategory, setSelectCategory] = React.useState<string[]>([])
+  const [selectCategory, setSelectCategory] = React.useState<string[]>(category)
 
   const handleClick = (category: string) => {
     if (!selectCategory.includes(category)){
