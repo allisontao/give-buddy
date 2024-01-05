@@ -1,6 +1,8 @@
 #onboarding-step-three {
   padding: 50px 150px;
   font-family: sans-serif;
+  overflow-y: auto;
+  height: calc(100vh - 100px);
 }
 
 #onboarding-step-three-card-container {

@@ -11,22 +11,46 @@ import { useGiveBuddyStore } from '../../store/store';
 const Onboarding = () => {
   const navigate = useNavigate();
   const [curStep, setCurStep] = React.useState(1);
+  const [curSubcategroy, setCurSubcategory] = React.useState(0)
 
   const [category] = useGiveBuddyStore(
     (state) => [state.category]
   )
 
   const handleNextClick = () => {
-    const newStep = curStep + 1
-    setCurStep(newStep)
+    if (curStep === 3 && curSubcategroy < category.length - 1){
+      const newSubcategory = curSubcategroy + 1
+      setCurSubcategory(newSubcategory)
+    }
+    else if (curStep === 2 && curSubcategroy === 0){
+      const newStep = curStep + 1
+      setCurStep(newStep)
+      setCurSubcategory(0)
+    }
+    else {
+      const newStep = curStep + 1
+      setCurStep(newStep)
+    }
   }
 
   const handleBackClick = () => {
-    const newStep = curStep - 1
-    if (newStep === 0){
+    if (curStep === 1){
+      const newStep = curStep - 1
+      setCurStep(newStep)
       navigate("/home")
     } 
+    else if(curStep === 3 && curSubcategroy > 0){
+      const newSubcategory = curSubcategroy - 1
+      setCurSubcategory(newSubcategory)
+      return
+    }
+    else if(curStep === 4){
+      const newStep = curStep - 1
+      setCurStep(newStep)
+      setCurSubcategory(category.length - 1)
+    }
     else {
+      const newStep = curStep - 1
       setCurStep(newStep)
     }
   }
@@ -39,7 +63,7 @@ const Onboarding = () => {
     switch(curStep) {
       case 1:   return <StepOne />;
       case 2:   return <StepTwo />;
-      case 3:   return <StepThree category={category[0]}/>;
+      case 3:   return <StepThree category={category[curSubcategroy]}/>;
       case 4:  return <StepFour />;
       default:      return <h1>No project match</h1>
     }
@@ -69,7 +93,7 @@ const Onboarding = () => {
     <>
       <div id="onboarding-page">
         <div id="onboarding-page-left">
-          {title(category[0])}
+          {title(category[curSubcategroy])}
           {description()}
 
           <div id="onboarding-page-left-link-container">
