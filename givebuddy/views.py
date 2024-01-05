@@ -6,6 +6,9 @@ from rest_framework import status
 from decouple import config 
 # firebase imports
 import pyrebase
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 # file imports
 from backend.scripts.matching_algorithm import match_charities
 from .models import User
@@ -23,9 +26,16 @@ config={
     "measurementId": config("measurementId")
 }
 
-firebase=pyrebase.initialize_app(config)
-authe = firebase.auth()
-database=firebase.database()
+cred = credentials.Certificate("./ServiceAccountKey.json")
+app = firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+# cred = credentials.ApplicationDefault()
+# app = firebase_admin.initialize_app(config)
+# database = firestore.client()
+# authe = firebase.auth()
+# database=firebase.database()
+
 
 # Landing
 def index(request):
