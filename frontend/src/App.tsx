@@ -6,6 +6,7 @@ import Landing from './page/Landing/Landing';
 import Onboarding from './page/Onboarding/Onboarding';
 import { BrowserRouter as Router} from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
+import Loading from './page/Loading/Loading';
  
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/signup" element={<Signup/>}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/onboarding" element={<Onboarding/>}/>
+              <Route path="/loading" element={<Loading/>}/>
             </Routes>                    
         </section>
       </div>

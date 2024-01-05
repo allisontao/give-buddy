@@ -33,6 +33,9 @@ const Onboarding = () => {
         setCurSubcategory(0)
       }
     }
+    else if(curStep === 4){
+      navigate("/loading")
+    }
     else {
       const newStep = curStep + 1
       setCurStep(newStep)
