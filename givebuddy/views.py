@@ -204,3 +204,18 @@ def user_registration(request):
             return Response({"error": serializer.errors}, status=400)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+# Profile endpoint    
+@api_view(['GET'])
+# Return all charities user donated to
+def my_profile(request, user_id):
+    try:
+        ref = database.child('users').child(user_id).get()
+
+        if ref is not None:
+            user_data = ref.val()
+            return Response(user_data)
+        else:
+            return Response({"error": "User data is empty"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
