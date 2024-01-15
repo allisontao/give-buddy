@@ -4,22 +4,27 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import "./StepOne.css"
+import { useGiveBuddyStore } from '../../store/store';
 
 const StepOne = () => {
-  const [transparency, setTransparency] = React.useState('');
-  const [cause, setCause] = React.useState('');
-  const [resultReporting, setResultReporting] = React.useState('');
+  const [transparency, updateTransparency, cause, updateCause, resultReporting, updateResultReporting] = useGiveBuddyStore(
+    (state) => [state.transparency_score, state.updateTransparencyScore, state.cause_score, state.updateCauseScore, state.result_reporting_score, state.updateResultReportingScore]
+  )
+
+  // const [transparency, setTransparency] = React.useState('');
+  // const [cause, setCause] = React.useState('');
+  // const [resultReporting, setResultReporting] = React.useState('');
 
   const handleTransparencyChange = (event: SelectChangeEvent) => {
-    setTransparency(event.target.value as string);
+    updateTransparency(event.target.value as string);
   };
 
   const handleCauseChange = (event: SelectChangeEvent) => {
-    setCause(event.target.value as string);
+    updateCause(event.target.value as string);
   };
 
   const handleResultReportingChange = (event: SelectChangeEvent) => {
-    setResultReporting(event.target.value as string);
+    updateResultReporting(event.target.value as string);
   };
 
   return (

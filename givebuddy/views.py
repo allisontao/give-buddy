@@ -80,7 +80,7 @@ def onboarding(request):
             'rr_ranking': user_data['rr_ranking'],
             'ctc_ranking': user_data['ctc_ranking'],
             # TODO: change this back to the charities from charity database after the database is set up
-            'charities': user_data['charities']
+            'charities': charity_list
         }
         user_matched_charities = match_charities(**user_selections)
         matched_charities_json = {

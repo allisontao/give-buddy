@@ -7,4 +7,3 @@ class Onboarding_serializer(serializers.Serializer):
     ft_ranking = serializers.IntegerField(min_value=1)
     rr_ranking = serializers.IntegerField(min_value=1)
     ctc_ranking = serializers.IntegerField(min_value=1)
-    charities = serializers.ListField(max_length=255)

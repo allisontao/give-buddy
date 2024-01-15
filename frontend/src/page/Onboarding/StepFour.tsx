@@ -1,11 +1,16 @@
 import React from 'react';
-import "./StepFour.css"
+import "./StepFour.css";
+import { useGiveBuddyStore } from '../../store/store';
 
 const StepFour = () => {
   const choices = ["Within Canada", "Within my province", "Within my city", "Doesn’t matter to me"]
   const [showProvince, setShowProvince] = React.useState(false)
   const [showCity, setShowCity] = React.useState(false)
-  const [location, setLocation] = React.useState("")
+  // const [location, setLocation] = React.useState("")
+
+  const [location, updateLocation] = useGiveBuddyStore(
+    (state) => [state.location, state.updateLocation]
+  )
 
   const handleClick = (choice: string) => {
     if (choice === "Within my province") {
@@ -20,8 +25,16 @@ const StepFour = () => {
       setShowCity(false)
       setShowProvince(false)
     }
-    setLocation(choice)
+    updateLocation(choice)
   }
+
+  const onInputChange = (e: any) => {
+    updateLocation(e.target.value)
+  }
+
+  React.useEffect(() => {
+    console.log(location)
+  }, [location])
 
   return (
     <div id="onboarding-step-four">
@@ -38,7 +51,7 @@ const StepFour = () => {
             {(choice === "Within my province" && showProvince === true) && (
               <>
                 <p id="onboarding-step-four-subtext">Enter Province</p>
-                <input id="onboarding-step-four-input"/>
+                <input id="onboarding-step-four-input" onInput={onInputChange}/>
               </>
             )}
             {(choice === "Within my city" && showCity === true) && (

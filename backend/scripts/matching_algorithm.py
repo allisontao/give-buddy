@@ -14,13 +14,13 @@ def match_charities(ft_ranking, rr_ranking, ctc_ranking, charities, categories =
     else:
         for charity in charities:
             # go to next charity if categories don't match
-            if charity['category'] not in categories:
+            if charity['main_category'] not in categories:
                 continue
             # if the user didn't choose any subcategories, all matching categories are matched charities
             if len(subcategories) == 0:
                 matched_charities.append(charity)
             else:
-                subcategory_list = charity['subcategory'].split(',')
+                subcategory_list = charity['sub_category'].split(',')
                 charity_subcategory_set = set(subcategory_list)
                 user_subcategory_set = set(subcategories)
                 # if they don't have any elements in common
@@ -29,8 +29,8 @@ def match_charities(ft_ranking, rr_ranking, ctc_ranking, charities, categories =
                 matched_charities.append(charity)
         
     for charity in matched_charities:
-        score = ft_ranking_weight*charity['financial_transparency_score'] + rr_ranking_weight*charity['results_reporting_score'] + ctc_ranking_weight*charity['cents_to_cause_score']
-        charity_scores[charity['id']] = score
+        score = ft_ranking_weight*charity['financial_transparency'] + rr_ranking_weight*charity['results_reporting'] + ctc_ranking_weight*charity['cents_to_cause']
+        charity_scores[charity['charity_id']] = score
 
     # return list of charity ids in the sorted order of matches
     sorted_matches = sorted(charity_scores, key=charity_scores.get, reverse=True)
