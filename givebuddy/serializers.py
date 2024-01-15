@@ -7,3 +7,14 @@ class Onboarding_serializer(serializers.Serializer):
     ft_ranking = serializers.IntegerField(min_value=1)
     rr_ranking = serializers.IntegerField(min_value=1)
     ctc_ranking = serializers.IntegerField(min_value=1)
+
+class Updated_donated_charities_serializer(serializers.Serializer):
+    donated_charity_id = serializers.IntegerField(min_value=1)
+    donated_amount = serializers.IntegerField(min_value=1)
+
+class User_serializer(serializers.Serializer):
+    user_uid = serializers.CharField(max_length=255)
+    first_name = serializers.CharField(max_length=255)
+    last_name = serializers.CharField(max_length=255)
+    email = serializers.EmailField()
+
