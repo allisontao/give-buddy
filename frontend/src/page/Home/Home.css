@@ -1,0 +1,30 @@
+#home-page {
+  padding: 140px;
+  font-family: sans-serif;
+  color: #4E4E4E;
+  width: 50%;
+}
+
+#home-page-title {
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+#home-page-description {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-top: 20px;
+}
+
+#home-page-link {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  color: #4E4E4E;
+}

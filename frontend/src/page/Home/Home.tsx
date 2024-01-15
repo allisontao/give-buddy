@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import {  signOut } from "firebase/auth";
-import {auth} from '../firebase';
+import {auth} from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+import "./Home.css"
 
 const Home = () => {
     const navigate = useNavigate();
@@ -33,17 +35,18 @@ const Home = () => {
 
     return(
       <>
-        <nav>
-          <p>
-            Welcome Home, Give Buddy
-          </p>
+        <div id="home-page">
+          <p id="home-page-title">Let’s get to know you better.</p>
+          <p id="home-page-description">To find charities that resonate with your values and passions, we’ll ask you a few questions. Your answers will help us create a personalized selection of causes that you align with.</p>
+          <p id="home-page-description">Please note that skipping questions may affect the precision of your results.</p>
 
-          <div>
+          <a href="/onboarding" id="home-page-link"><p style={{paddingTop: "40px"}}>Get Started</p></a>
+          {/* <div>
             <button onClick={handleLogout}>
               Logout
             </button>
-          </div>
-        </nav>
+          </div> */}
+        </div>
       </>
     )
 }

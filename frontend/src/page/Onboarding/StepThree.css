@@ -1,0 +1,45 @@
+#onboarding-step-three {
+  padding: 50px 150px;
+  font-family: sans-serif;
+  overflow-y: auto;
+  height: calc(100vh - 100px);
+}
+
+#onboarding-step-three-card-container {
+  border-radius: 12px;
+  border: 1px solid #BEBEBE;
+  background: #FFF;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+#onboarding-step-three-card-name {
+  margin: 0px;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #4E4E4E;
+}
+
+#onboarding-step-three-card-name-no-description{
+  margin: 0px;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #4E4E4E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#onboarding-step-three-card-description {
+  margin: 0px; 
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #4E4E4E;
+  margin-top: 10px;
+}
