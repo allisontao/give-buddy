@@ -22,6 +22,18 @@
   color: #4E4E4E;
 }
 
+#onboarding-step-three-card-name-no-description{
+  margin: 0px;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #4E4E4E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #onboarding-step-three-card-description {
   margin: 0px; 
   font-size: 16px;
