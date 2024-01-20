@@ -12,7 +12,7 @@ subcategories: list of subcategories user is interested in, defaults to empty li
 def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province = None, city = None , categories = [], subcategories = []):
     ranking_map = {1: 1.5, 2: 1.0, 3: 0.5}
     matched_charities = []
-    subcategories = [x.lower() for x in subcategories]
+    subcategories = [x.lower().strip() for x in subcategories]
     # {charity id : score}
     charity_scores = {}
     ft_ranking_weight = ranking_map[ft_ranking]
@@ -20,28 +20,37 @@ def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province = N
     ctc_ranking_weight = ranking_map[ctc_ranking]
     
     for charity in charities:
+        print("---------" + str(charity['charity_id']))
         # go to next charity of province doesn't match
-        if province and charity['province'].lower() != province.lower():
+        if province != "" and charity['province'].lower() != province.lower():
+            print(1)
             continue
         # go to next charity if city doesn't match
-        if city and charity['city'].lower()  != city.lower():
+        if city != "" and charity['city'].lower()  != city.lower():
+            print(2)
             continue
-        # if the user didn't choose any subcategories, all categories are matched charities
+        # if the user didn't choose any categories, all categories are matched charities
         if len(categories) == 0:
             matched_charities.append(charity)
+            print(3)
             continue
         # go to next charity if categories don't match
         if charity['main_category'] not in categories:
+            print(4)
             continue
         # if the user didn't choose any subcategories, all subcategories are matched charities
         if len(subcategories) == 0:
             matched_charities.append(charity)
         else:
-            subcategory_list = charity['sub_category'].lower().split(',')
+            print(charity['sub_category'])
+            subcategory_list = charity['sub_category'].strip().lower().split(', ')
             charity_subcategory_set = set(subcategory_list)
             user_subcategory_set = set(subcategories)
+            print(charity_subcategory_set)
+            print(user_subcategory_set)
             # if they don't have any elements in common
             if not (charity_subcategory_set & user_subcategory_set):
+                print(5)
                 continue
             matched_charities.append(charity)
         
