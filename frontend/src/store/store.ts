@@ -10,17 +10,21 @@ interface GiveBuddyState {
   location: string | undefined
   province: string | undefined
   city: string | undefined
+  user_uid: string | undefined
+  user_id: string | undefined
 }
 
 type GiveBuddyAction = {
   updateCategory: (category: GiveBuddyState['category']) => void
   updateSubcategory: (csubcategory_list: GiveBuddyState['subcategory_list']) => void
   updateTransparencyScore: (transparency_score: GiveBuddyState['transparency_score']) => void
-  updateCauseScore: (transparency_score: GiveBuddyState['cause_score']) => void
-  updateResultReportingScore: (transparency_score: GiveBuddyState['result_reporting_score']) => void
-  updateLocation: (category: GiveBuddyState['location']) => void
-  updateProvince: (category: GiveBuddyState['province']) => void
-  updateCity: (category: GiveBuddyState['city']) => void
+  updateCauseScore: (cause_score: GiveBuddyState['cause_score']) => void
+  updateResultReportingScore: (result_reporting_score: GiveBuddyState['result_reporting_score']) => void
+  updateLocation: (location: GiveBuddyState['location']) => void
+  updateProvince: (province: GiveBuddyState['province']) => void
+  updateCity: (city: GiveBuddyState['city']) => void
+  updateUserUid: (user_uid: GiveBuddyState['user_uid']) => void
+  updateUserId: (user_id: GiveBuddyState['user_id']) => void
 }
 
 export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddyAction>()((set) => ({
@@ -32,12 +36,16 @@ export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddy
   location: "",
   province: "",
   city: "",
+  user_uid: "",
+  user_id: "",
   updateCategory: (newCategory) => set(() => ({ category: newCategory })),
   updateSubcategory: (newSubcategory) => set(() => ({ subcategory_list: newSubcategory})),
   updateTransparencyScore: (newScore) => set(() => ({ transparency_score: newScore })),
   updateCauseScore: (newScore) => set(() => ({ cause_score: newScore })),
   updateResultReportingScore: (newScore) => set(() => ({ result_reporting_score: newScore })),
   updateLocation: (newLocation) => set(() => ({ location: newLocation })),
-  updateProvince: (newProvince) => set(() => ({ location: newProvince })),
-  updateCity: (newCity) => set(() => ({ location: newCity })),
+  updateProvince: (newProvince) => set(() => ({ province: newProvince })),
+  updateCity: (newCity) => set(() => ({ city: newCity })),
+  updateUserUid: (newUserUid) => set(() => ({ user_uid: newUserUid })),
+  updateUserId: (newUserId) => set(() => ({ user_id: newUserId })),
 }), shallow)

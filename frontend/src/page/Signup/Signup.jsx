@@ -3,6 +3,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 import { auth } from '../../firebase';
 import "./Signup.css"
+import { useCreateUser } from '../../utils/utils';
+import axios from "axios";
+import { API_URL } from "../../constants/url";
+import { useGiveBuddyStore } from '../../store/store';
  
 const Signup = () => {
     const navigate = useNavigate();
@@ -11,22 +15,40 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [updateUserUid] = useGiveBuddyStore(
+      (state) => [state.updateUserUid]
+  )
  
     const onSubmit = async (e) => {
       e.preventDefault()
      
       await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log(user);
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          updateUserUid(user.uid)
+          axios
+          .post(`${API_URL}/registration`, {
+            "user_uid": user.uid,
+            "first_name": firstName,
+            "last_name": lastName, 
+            "email": email
+          }, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((res) => {
+            console.log(res)
             navigate("/login")
-            // ...
+          })
+          .catch((err) => console.log(err));
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
             // ..
         });
  
