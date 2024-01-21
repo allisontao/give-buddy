@@ -8,16 +8,33 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 
 import { useGiveBuddyStore } from '../../store/store';
-import { postOnboarding } from '../../utils/utils';
+import { API_URL } from "../../constants/url";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [curStep, setCurStep] = React.useState(1);
   const [curSubcategroy, setCurSubcategory] = React.useState(0)
 
-  const [category] = useGiveBuddyStore(
-    (state) => [state.category]
+  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list] = useGiveBuddyStore(
+    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list]
   )
+
+  const postOnboarding = () => {
+    axios
+      .post(`${API_URL}/onboarding/1`, {
+        "ft_ranking":ft_ranking,
+        "rr_ranking":rr_ranking,
+        "ctc_ranking":ctc_ranking,
+        "categories":category,
+        "subcategories":subcategory_list
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }
 
   const handleNextClick = () => {
     if (curStep === 3 && curSubcategroy < category.length - 1){
