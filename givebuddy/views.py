@@ -184,6 +184,7 @@ def matched_for_you(request, user_id):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
     
+# User Endpoints
 # User Registration Endpoint
 @api_view(['POST'])
 # Create entry in the user table
@@ -192,12 +193,21 @@ def user_registration(request):
         serializer = User_serializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            # request data
+
+            # Check if user with the same user_uid or email already exists
+            existing_users = database.child('users').order_by_child('user_uid').equal_to(validated_data['user_uid']).get().val()
+            if existing_users:
+                return Response(existing_users)
+
+            existing_users_email = database.child('users').order_by_child('email').equal_to(validated_data['email']).get().val()
+            if existing_users_email:
+                return Response(existing_users_email)
+
             new_user = {
                 'user_uid': validated_data['user_uid'],
                 'first_name': validated_data['first_name'],
                 'last_name': validated_data['last_name'],
-                'email': validated_data['email']
+                'email': validated_data['email'],
             }
 
             user_ref = database.child('users').push(new_user)
@@ -205,5 +215,26 @@ def user_registration(request):
             return Response(created_user)
         else:
             return Response({"error": serializer.errors}, status=400)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
+# User Info Endpoint
+@api_view(['GET'])
+def user_info(request, user_uid):
+    try:
+        # Query the users table where 'user_uid' matches the provided UID
+        user_ref = database.child('users').order_by_child('user_uid').equal_to(user_uid).get()
+
+        if user_ref:
+            # Get the auto-generated ID 
+            user_id = next(iter(user_ref.val().keys()))
+
+            # Get the user data
+            user_data = next(iter(user_ref.val().values()))
+
+            response_data = {'user_id': user_id, 'user_data': user_data}
+            return Response(response_data)
+        else:
+            return Response({"error": "User not found"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
