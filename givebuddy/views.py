@@ -197,11 +197,11 @@ def user_registration(request):
             # Check if user with the same user_uid or email already exists
             existing_users = database.child('users').order_by_child('user_uid').equal_to(validated_data['user_uid']).get().val()
             if existing_users:
-                return Response({"error": "User with the same user_uid already exists"}, status=400)
+                return Response(existing_users)
 
             existing_users_email = database.child('users').order_by_child('email').equal_to(validated_data['email']).get().val()
             if existing_users_email:
-                return Response({"error": "User with the same email already exists"}, status=400)
+                return Response(existing_users_email)
 
             new_user = {
                 'user_uid': validated_data['user_uid'],
