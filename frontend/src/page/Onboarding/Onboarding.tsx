@@ -15,8 +15,8 @@ const Onboarding = () => {
   const [curStep, setCurStep] = React.useState(1);
   const [curSubcategroy, setCurSubcategory] = React.useState(0)
 
-  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list] = useGiveBuddyStore(
-    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list]
+  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list, province, city] = useGiveBuddyStore(
+    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list, state.province, state.city]
   )
 
   const postOnboarding = () => {
@@ -26,7 +26,9 @@ const Onboarding = () => {
         "rr_ranking":rr_ranking,
         "ctc_ranking":ctc_ranking,
         "categories":category,
-        "subcategories":subcategory_list
+        "subcategories":subcategory_list, 
+        "province": province, 
+        "city": city
       }, {
         headers: {
           'Content-Type': 'application/json'
