@@ -8,6 +8,8 @@ interface GiveBuddyState {
   cause_score: string | undefined
   result_reporting_score: string | undefined
   location: string | undefined
+  province: string | undefined
+  city: string | undefined
 }
 
 type GiveBuddyAction = {
@@ -17,6 +19,8 @@ type GiveBuddyAction = {
   updateCauseScore: (transparency_score: GiveBuddyState['cause_score']) => void
   updateResultReportingScore: (transparency_score: GiveBuddyState['result_reporting_score']) => void
   updateLocation: (category: GiveBuddyState['location']) => void
+  updateProvince: (category: GiveBuddyState['province']) => void
+  updateCity: (category: GiveBuddyState['city']) => void
 }
 
 export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddyAction>()((set) => ({
@@ -25,11 +29,15 @@ export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddy
   transparency_score: undefined, 
   cause_score: undefined, 
   result_reporting_score: undefined,
-  location: undefined,
+  location: "",
+  province: "",
+  city: "",
   updateCategory: (newCategory) => set(() => ({ category: newCategory })),
   updateSubcategory: (newSubcategory) => set(() => ({ subcategory_list: newSubcategory})),
   updateTransparencyScore: (newScore) => set(() => ({ transparency_score: newScore })),
   updateCauseScore: (newScore) => set(() => ({ cause_score: newScore })),
   updateResultReportingScore: (newScore) => set(() => ({ result_reporting_score: newScore })),
   updateLocation: (newLocation) => set(() => ({ location: newLocation })),
+  updateProvince: (newProvince) => set(() => ({ location: newProvince })),
+  updateCity: (newCity) => set(() => ({ location: newCity })),
 }), shallow)

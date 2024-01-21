@@ -2,6 +2,7 @@ import React from 'react';
 import "./Loading.css"
 import LoadingIcon from "../../assets/Loading.png"
 
+
 const Loading = () => {
   return (
     <div id="loading-page">

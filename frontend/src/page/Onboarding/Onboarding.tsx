@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import "./Onboarding.css"
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
@@ -7,6 +8,7 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 
 import { useGiveBuddyStore } from '../../store/store';
+import { postOnboarding } from '../../utils/utils';
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const Onboarding = () => {
       }
     }
     else if(curStep === 4){
+      postOnboarding()
       navigate("/loading")
     }
     else {
