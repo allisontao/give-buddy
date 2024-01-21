@@ -12,6 +12,7 @@ interface GiveBuddyState {
   city: string | undefined
   user_uid: string | undefined
   user_id: string | undefined
+  matched_charities: Number[] | undefined
 }
 
 type GiveBuddyAction = {
@@ -25,6 +26,7 @@ type GiveBuddyAction = {
   updateCity: (city: GiveBuddyState['city']) => void
   updateUserUid: (user_uid: GiveBuddyState['user_uid']) => void
   updateUserId: (user_id: GiveBuddyState['user_id']) => void
+  updateMatchedCharities: (matched_charities: GiveBuddyState['matched_charities']) => void
 }
 
 export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddyAction>()((set) => ({
@@ -38,6 +40,7 @@ export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddy
   city: "",
   user_uid: "",
   user_id: "",
+  matched_charities: [],
   updateCategory: (newCategory) => set(() => ({ category: newCategory })),
   updateSubcategory: (newSubcategory) => set(() => ({ subcategory_list: newSubcategory})),
   updateTransparencyScore: (newScore) => set(() => ({ transparency_score: newScore })),
@@ -48,4 +51,5 @@ export const useGiveBuddyStore = createWithEqualityFn<GiveBuddyState & GiveBuddy
   updateCity: (newCity) => set(() => ({ city: newCity })),
   updateUserUid: (newUserUid) => set(() => ({ user_uid: newUserUid })),
   updateUserId: (newUserId) => set(() => ({ user_id: newUserId })),
+  updateMatchedCharities: (newMatchedCharities) => set(() => ({ matched_charities: newMatchedCharities })),
 }), shallow)

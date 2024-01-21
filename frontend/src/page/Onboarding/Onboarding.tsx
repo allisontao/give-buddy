@@ -15,11 +15,12 @@ const Onboarding = () => {
   const [curStep, setCurStep] = React.useState(1);
   const [curSubcategroy, setCurSubcategory] = React.useState(0)
 
-  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list, province, city] = useGiveBuddyStore(
-    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list, state.province, state.city]
+  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list, province, city, updateMatchedCharities] = useGiveBuddyStore(
+    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list, state.province, state.city, state.updateMatchedCharities]
   )
 
   const postOnboarding = () => {
+    navigate("/loading")
     axios
       .post(`${API_URL}/onboarding/1`, {
         "ft_ranking":ft_ranking,
@@ -34,7 +35,11 @@ const Onboarding = () => {
           'Content-Type': 'application/json'
         }
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res.data.user_matched_charities)
+        updateMatchedCharities(res.data.user_matched_charities)
+        navigate("/recommended_charities")
+      })
       .catch((err) => console.log(err));
   }
 
@@ -56,7 +61,6 @@ const Onboarding = () => {
     }
     else if(curStep === 4){
       postOnboarding()
-      navigate("/loading")
     }
     else {
       const newStep = curStep + 1
