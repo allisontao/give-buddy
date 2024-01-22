@@ -7,6 +7,7 @@ import Onboarding from './page/Onboarding/Onboarding';
 import { BrowserRouter as Router} from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
 import Loading from './page/Loading/Loading';
+import RecommendedCharities from './page/RecommendedCharities/RecommendedCharities';
  
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/login" element={<Login/>}/>
               <Route path="/onboarding" element={<Onboarding/>}/>
               <Route path="/loading" element={<Loading/>}/>
+              <Route path="/recommended_charities" element={<RecommendedCharities/>}/>
             </Routes>                    
         </section>
       </div>

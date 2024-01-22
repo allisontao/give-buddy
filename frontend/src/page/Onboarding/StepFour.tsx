@@ -8,8 +8,8 @@ const StepFour = () => {
   const [showCity, setShowCity] = React.useState(false)
   // const [location, setLocation] = React.useState("")
 
-  const [location, updateLocation] = useGiveBuddyStore(
-    (state) => [state.location, state.updateLocation]
+  const [location, province, city, updateLocation, updateProvince, updateCity] = useGiveBuddyStore(
+    (state) => [state.location, state.province, state.city, state.updateLocation, state.updateProvince, state.updateCity]
   )
 
   const handleClick = (choice: string) => {
@@ -28,13 +28,19 @@ const StepFour = () => {
     updateLocation(choice)
   }
 
-  const onInputChange = (e: any) => {
-    updateLocation(e.target.value)
+  const onProvinceInputChange = (e: any) => {
+    updateProvince(e.target.value)
   }
 
-  React.useEffect(() => {
-    console.log(location)
-  }, [location])
+  const onCityInputChange = (e: any) => {
+    updateCity(e.target.value)
+  }
+
+  // React.useEffect(() => {
+  //   console.log(location)
+  //   console.log(province)
+  //   console.log(city)
+  // }, [location, province, city])
 
   return (
     <div id="onboarding-step-four">
@@ -51,13 +57,13 @@ const StepFour = () => {
             {(choice === "Within my province" && showProvince === true) && (
               <>
                 <p id="onboarding-step-four-subtext">Enter Province</p>
-                <input id="onboarding-step-four-input" onInput={onInputChange}/>
+                <input id="onboarding-step-four-input" onInput={onProvinceInputChange}/>
               </>
             )}
             {(choice === "Within my city" && showCity === true) && (
               <>
                 <p id="onboarding-step-four-subtext">Enter City</p>
-                <input id="onboarding-step-four-input"/>
+                <input id="onboarding-step-four-input" onInput={onCityInputChange}/>
               </>
             )}
           </>

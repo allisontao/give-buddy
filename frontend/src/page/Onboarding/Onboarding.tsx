@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import "./Onboarding.css"
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
@@ -7,15 +8,40 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 
 import { useGiveBuddyStore } from '../../store/store';
+import { API_URL } from "../../constants/url";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [curStep, setCurStep] = React.useState(1);
   const [curSubcategroy, setCurSubcategory] = React.useState(0)
 
-  const [category] = useGiveBuddyStore(
-    (state) => [state.category]
+  const [ft_ranking, rr_ranking, ctc_ranking, category, subcategory_list, province, city, updateMatchedCharities] = useGiveBuddyStore(
+    (state) => [state.transparency_score, state.result_reporting_score, state.cause_score, state.category, state.subcategory_list, state.province, state.city, state.updateMatchedCharities]
   )
+
+  const postOnboarding = () => {
+    navigate("/loading")
+    axios
+      .post(`${API_URL}/onboarding/1`, {
+        "ft_ranking":ft_ranking,
+        "rr_ranking":rr_ranking,
+        "ctc_ranking":ctc_ranking,
+        "categories":category,
+        "subcategories":subcategory_list, 
+        "province": province, 
+        "city": city
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((res) => {
+        console.log(res.data.user_matched_charities)
+        updateMatchedCharities(res.data.user_matched_charities)
+        navigate("/recommended_charities")
+      })
+      .catch((err) => console.log(err));
+  }
 
   const handleNextClick = () => {
     if (curStep === 3 && curSubcategroy < category.length - 1){
@@ -34,7 +60,7 @@ const Onboarding = () => {
       }
     }
     else if(curStep === 4){
-      navigate("/loading")
+      postOnboarding()
     }
     else {
       const newStep = curStep + 1

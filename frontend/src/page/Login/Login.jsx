@@ -3,11 +3,15 @@ import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { NavLink, useNavigate } from 'react-router-dom'
 import "./Login.css"
+import { useGiveBuddyStore } from '../../store/store';
  
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [updateUserUid] = useGiveBuddyStore(
+        (state) => [state.updateUserUid]
+    )
        
     const onLogin = (e) => {
         e.preventDefault();
@@ -23,7 +27,6 @@ const Login = () => {
             const errorMessage = error.message;
             console.log(errorCode, errorMessage)
         });
-       
     }
  
     return(
