@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from decouple import config 
+from urllib.parse import quote
 # firebase imports
 import pyrebase
 # file imports
@@ -190,6 +191,7 @@ def matched_for_you(request, user_id):
 # Create entry in the user table
 def user_registration(request):
     try:
+
         serializer = User_serializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
@@ -222,8 +224,10 @@ def user_registration(request):
 @api_view(['GET'])
 def user_info(request, user_uid):
     try:
-        # Query the users table where 'user_uid' matches the provided UID
-        user_ref = database.child('users').order_by_child('user_uid').equal_to(user_uid).get()
+        # encode
+        encoded_user_uid = quote(user_uid, safe='')
+        # query the users table where 'user_uid' matches the provided UID
+        user_ref = database.child('users').order_by_child('user_uid').equal_to(encoded_user_uid).get()
 
         if user_ref:
             # Get the auto-generated ID 
