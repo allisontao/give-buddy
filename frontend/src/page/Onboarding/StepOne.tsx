@@ -10,10 +10,16 @@ const StepOne = () => {
   const [transparency, updateTransparency, cause, updateCause, resultReporting, updateResultReporting] = useGiveBuddyStore(
     (state) => [state.transparency_score, state.updateTransparencyScore, state.cause_score, state.updateCauseScore, state.result_reporting_score, state.updateResultReportingScore]
   )
+  const [availableTChoice, setAvailableTChoice] = React.useState(["", "1","2","3"])
+  const [availableCChoice, setAvailableCChoice] = React.useState(["", "1","2","3"])
+  const [availableRChoice, setAvailableRChoice] = React.useState(["", "1","2","3"])
 
-  // const [transparency, setTransparency] = React.useState('');
-  // const [cause, setCause] = React.useState('');
-  // const [resultReporting, setResultReporting] = React.useState('');
+  React.useEffect(() => {
+    setAvailableTChoice(["", "1","2","3"].filter((c) => c !== cause && c !== resultReporting))
+    setAvailableCChoice(["", "1","2","3"].filter((c) => c !== transparency && c !== resultReporting))
+    setAvailableRChoice(["", "1","2","3"].filter((c) => c !== cause && c !== transparency))
+  }, [transparency, cause, resultReporting])
+
 
   const handleTransparencyChange = (event: SelectChangeEvent) => {
     updateTransparency(event.target.value as string);
@@ -37,9 +43,11 @@ const StepOne = () => {
             value={transparency}
             onChange={handleTransparencyChange}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {availableTChoice.map((c) => {
+              return (
+                <MenuItem value={c} style={{height: "40px"}}>{c}</MenuItem>
+              )
+            })}
           </Select>
         </FormControl>
         <div id="onboarding-step-one-description-container">
@@ -55,9 +63,11 @@ const StepOne = () => {
             value={cause}
             onChange={handleCauseChange}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {availableCChoice.map((c) => {
+              return (
+                <MenuItem value={c} style={{height: "40px"}}>{c}</MenuItem>
+              )
+            })}
           </Select>
         </FormControl>
         <div id="onboarding-step-one-description-container">
@@ -73,9 +83,11 @@ const StepOne = () => {
             value={resultReporting}
             onChange={handleResultReportingChange}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {availableRChoice.map((c) => {
+              return (
+                <MenuItem value={c} style={{height: "40px"}}>{c}</MenuItem>
+              )
+            })}
           </Select>
         </FormControl>
         <div id="onboarding-step-one-description-container">
