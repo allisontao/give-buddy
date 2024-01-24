@@ -54,16 +54,17 @@ def charities(request):
 # Returns specified charity based on charity id
 def specific_charity(request, charity_id):
     try:
-        ref = database.child('charities').child(charity_id).get()
-    
-        if ref is not None:
-            charity_data = ref.val()
-            if charity_data:
-                return Response(charity_data)
-            else:
-                return Response({"error": "Charity data is empty"}, status=404)
+        int_id = int(charity_id)
+
+        charity_ref = database.child('charities').order_by_child('charity_id').equal_to(int_id).get()
+
+        if charity_ref:
+            charity_data = next(iter(charity_ref.val().values()))
+
+            return Response(charity_data)
         else:
-            return Response({"error": "Charity data is empty"}, status=404)
+            return Response({"error": "Charity not found"}, status=404)
+        
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
