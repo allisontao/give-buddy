@@ -139,6 +139,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    "https://calm-tor-53866-33407b1d1616.herokuapp.com",
+    "http://calm-tor-53866-33407b1d1616.herokuapp.com"
 )
 
 import dj_database_url
