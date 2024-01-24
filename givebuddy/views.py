@@ -205,15 +205,18 @@ def user_registration(request):
                 return Response(existing_users_email)
 
             new_user = {
-                'user_uid': validated_data['user_uid'],
+                'email': validated_data['email'],
                 'first_name': validated_data['first_name'],
                 'last_name': validated_data['last_name'],
-                'email': validated_data['email'],
+                'user_uid': validated_data['user_uid'],
             }
 
             user_ref = database.child('users').push(new_user)
-            created_user = database.child('users').child(user_ref['name']).get().val()
-            return Response(created_user)
+            created_user_id = user_ref['name']
+            created_user_data = database.child('users').child(created_user_id).get().val()
+            
+            response_data = {'user_id': created_user_id, 'user_data': created_user_data}
+            return Response(response_data)
         else:
             return Response({"error": serializer.errors}, status=400)
     except Exception as e:
