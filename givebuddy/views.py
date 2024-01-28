@@ -77,7 +77,6 @@ def onboarding(request, user_id):
       serializer = Onboarding_serializer(data=request.data)
       if serializer.is_valid():
           user_data = serializer.validated_data
-          print(user_data)
           charity_list = database.child('charities').get().val()
           user_selections = {
               'categories': user_data['categories'],
