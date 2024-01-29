@@ -127,74 +127,52 @@ def generate_results(matched_charities):
     return result_ids
 
 
-def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province = None, user_categories = [], user_subcategories = []):
+def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province=None, user_categories=[], user_subcategories=[]):
     matched_charities = {}
     ranking_map = {1: 1.5, 2: 1.0, 3: 0.5}
     user_subcategories = [x.lower().strip() for x in user_subcategories]
-    # {charity id : score}
+    
     ft_ranking_weight = ranking_map[ft_ranking]
     rr_ranking_weight = ranking_map[rr_ranking]
     ctc_ranking_weight = ranking_map[ctc_ranking]
+
     for charity in charities:
-        score = ft_ranking_weight*charity['financial_transparency'] + rr_ranking_weight*charity['results_reporting'] + ctc_ranking_weight*charity['cents_to_cause']
+        category = charity['main_category']
+        subcategory_list = [x.lower().strip() for x in charity['sub_category'].split(', ')]
+
+        # Skip charity if province doesn't match
+        if province and province.lower() != charity['province'].lower():
+            continue
+
+        score = (
+            ft_ranking_weight * charity['financial_transparency'] +
+            rr_ranking_weight * charity['results_reporting'] +
+            ctc_ranking_weight * charity['cents_to_cause']
+        )
         charity_id = charity['charity_id']
         charity_tuple = (charity_id, score)
-        category = charity['main_category']
-        subcategory_list = charity['sub_category'].strip().lower().split(', ')
-        # go to next charity of province doesn't match
-        if province:
-            if province != "" and charity['province'].lower() != province.lower():
-                continue
-        # if the user didn't choose any categories, all categories are matched charities
-        if len(user_categories) == 0:
-            if category not in matched_charities:
-                matched_charities[category] = {}
-            for subcategory in subcategory_list:
-                if subcategory in matched_charities[category]:
-                    matched_charities[category][subcategory].append(charity_tuple)
-                else:
-                    matched_charities[category][subcategory] = [charity_tuple]
-            continue
-        # go to next charity if categories don't match
-        if category not in user_categories:
-            continue
-        # if the user didn't choose any subcategories, all subcategories are matched charities
-        else:
-            if len(user_subcategories) == 0:
+
+        # Check if user_categories is empty or category is in user_categories
+        if not user_categories or category in user_categories:
+            # Check if user_subcategories is empty or has common elements with charity's subcategories
+            if not user_subcategories or set(user_subcategories) & set(subcategory_list):
                 if category not in matched_charities:
                     matched_charities[category] = {}
                 for subcategory in subcategory_list:
-                    if subcategory in matched_charities[category]:
-                        matched_charities[category][subcategory].append(charity_tuple)
-                    else:
-                        matched_charities[category][subcategory] = [charity_tuple]
-            else:
-                charity_subcategory_set = set(subcategory_list)
-                user_subcategory_set = set(user_subcategories)
-                # if they don't have any elements in common
-                if not (charity_subcategory_set & user_subcategory_set):
-                    continue
-                else:
-                    if category not in matched_charities:
-                        matched_charities[category] = {}
-                    for subcategory in subcategory_list:
-                        if subcategory in matched_charities[category]:
-                            matched_charities[category][subcategory].append(charity_tuple)
-                        else:
-                            matched_charities[category][subcategory] = [charity_tuple]
+                    matched_charities[category].setdefault(subcategory, []).append(charity_tuple)
     res = generate_results(matched_charities)
     return res
 
 def main():
-    # categories = ['animals']
-    # subcategories = ['welfare']
-    # ft_ranking = 1
-    # rr_ranking = 2
-    # ctc_ranking = 3
-    # charities = [{'charity_id': 1, 'main_category': 'health', 'sub_category': 'Cancer', 'financial_transparency': 100, 'results_reporting': 50, 'cents_to_cause': 100, 'province': 'BC'},
-    #             {'charity_id': 2, 'main_category': 'animals', 'sub_category': 'welfare', 'financial_transparency': 100, 'results_reporting': 0, 'cents_to_cause': 100, 'province': 'ON'},
-    #             {'charity_id': 3, 'main_category': 'animals', 'sub_category': 'welfare, adoption', 'financial_transparency': 100, 'results_reporting': 100, 'cents_to_cause': 100, 'province': 'ON', 'city': 'richmond hill'}]
-    # print(match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
+    categories = ['animals']
+    subcategories = ['welfare']
+    ft_ranking = 1
+    rr_ranking = 2
+    ctc_ranking = 3
+    charities = [{'charity_id': 1, 'main_category': 'health', 'sub_category': 'Cancer', 'financial_transparency': 100, 'results_reporting': 50, 'cents_to_cause': 100, 'province': 'BC'},
+                {'charity_id': 2, 'main_category': 'animals', 'sub_category': 'welfare', 'financial_transparency': 100, 'results_reporting': 0, 'cents_to_cause': 100, 'province': 'ON'},
+                {'charity_id': 3, 'main_category': 'animals', 'sub_category': 'welfare, adoption', 'financial_transparency': 100, 'results_reporting': 100, 'cents_to_cause': 100, 'province': 'ON', 'city': 'richmond hill'}]
+    print(match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
     pass
 
 if __name__ == "__main__":
