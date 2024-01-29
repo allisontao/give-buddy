@@ -80,10 +80,9 @@ def onboarding(request, user_id):
           print(user_data)
           charity_list = database.child('charities').get().val()
           user_selections = {
-              'categories': user_data['categories'],
-              'subcategories': user_data['subcategories'],
+              'user_categories': user_data['categories'],
+              'user_subcategories': user_data['subcategories'],
               'province': user_data['province'],
-              'city': user_data['city'],
               'ft_ranking': user_data['ft_ranking'],
               'rr_ranking': user_data['rr_ranking'],
               'ctc_ranking': user_data['ctc_ranking'],

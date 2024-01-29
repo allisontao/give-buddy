@@ -127,7 +127,7 @@ def generate_results(matched_charities):
     return result_ids
 
 
-def get_matched_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province = None, user_categories = [], user_subcategories = []):
+def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province = None, user_categories = [], user_subcategories = []):
     matched_charities = {}
     ranking_map = {1: 1.5, 2: 1.0, 3: 0.5}
     user_subcategories = [x.lower().strip() for x in user_subcategories]
@@ -194,7 +194,7 @@ def main():
     # charities = [{'charity_id': 1, 'main_category': 'health', 'sub_category': 'Cancer', 'financial_transparency': 100, 'results_reporting': 50, 'cents_to_cause': 100, 'province': 'BC'},
     #             {'charity_id': 2, 'main_category': 'animals', 'sub_category': 'welfare', 'financial_transparency': 100, 'results_reporting': 0, 'cents_to_cause': 100, 'province': 'ON'},
     #             {'charity_id': 3, 'main_category': 'animals', 'sub_category': 'welfare, adoption', 'financial_transparency': 100, 'results_reporting': 100, 'cents_to_cause': 100, 'province': 'ON', 'city': 'richmond hill'}]
-    # print(get_matched_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
+    # print(match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
     pass
 
 if __name__ == "__main__":
