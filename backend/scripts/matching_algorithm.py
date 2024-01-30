@@ -158,21 +158,26 @@ def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province=Non
             if not user_subcategories or set(user_subcategories) & set(subcategory_list):
                 if category not in matched_charities:
                     matched_charities[category] = {}
-                for subcategory in subcategory_list:
-                    matched_charities[category].setdefault(subcategory, []).append(charity_tuple)
+                if set(user_subcategories) & set(subcategory_list):
+                    common_subcategories = set(user_subcategories) & set(subcategory_list)
+                    for subcategory in common_subcategories:
+                        matched_charities[category].setdefault(subcategory, []).append(charity_tuple)
+                else:
+                    for subcategory in subcategory_list:
+                        matched_charities[category].setdefault(subcategory, []).append(charity_tuple)
     res = generate_results(matched_charities)
     return res
 
 def main():
-    categories = ['animals']
-    subcategories = ['welfare']
-    ft_ranking = 1
-    rr_ranking = 2
-    ctc_ranking = 3
-    charities = [{'charity_id': 1, 'main_category': 'health', 'sub_category': 'Cancer', 'financial_transparency': 100, 'results_reporting': 50, 'cents_to_cause': 100, 'province': 'BC'},
-                {'charity_id': 2, 'main_category': 'animals', 'sub_category': 'welfare', 'financial_transparency': 100, 'results_reporting': 0, 'cents_to_cause': 100, 'province': 'ON'},
-                {'charity_id': 3, 'main_category': 'animals', 'sub_category': 'welfare, adoption', 'financial_transparency': 100, 'results_reporting': 100, 'cents_to_cause': 100, 'province': 'ON', 'city': 'richmond hill'}]
-    print(match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
+    # categories = ['animals']
+    # subcategories = ['welfare']
+    # ft_ranking = 1
+    # rr_ranking = 2
+    # ctc_ranking = 3
+    # charities = [{'charity_id': 1, 'main_category': 'health', 'sub_category': 'Cancer', 'financial_transparency': 100, 'results_reporting': 50, 'cents_to_cause': 100, 'province': 'BC'},
+    #             {'charity_id': 2, 'main_category': 'animals', 'sub_category': 'welfare', 'financial_transparency': 100, 'results_reporting': 0, 'cents_to_cause': 100, 'province': 'ON'},
+    #             {'charity_id': 3, 'main_category': 'animals', 'sub_category': 'welfare, adoption', 'financial_transparency': 100, 'results_reporting': 100, 'cents_to_cause': 100, 'province': 'ON', 'city': 'richmond hill'}]
+    # print(match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, user_categories=categories, user_subcategories=subcategories))
     pass
 
 if __name__ == "__main__":
