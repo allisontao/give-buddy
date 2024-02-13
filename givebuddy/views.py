@@ -132,7 +132,7 @@ def saved_charities(request, user_id):
             if saved_charities:
                 saved_charities_list = saved_charities if isinstance(saved_charities, list) else [saved_charities]
                 if saved_charity_id in saved_charities_list:
-                    return Response({"error": "Charity ID already exists in saved charities"}, status=400)
+                    return Response({"saved_charities": saved_charities_list})
                 saved_charities_list.append(saved_charity_id)
             else:
                 saved_charities_list = [saved_charity_id]
