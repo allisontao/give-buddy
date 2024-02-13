@@ -20,3 +20,5 @@ class User_serializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=255)
     email = serializers.EmailField()
 
+class Saved_charities_serializer(serializers.Serializer):
+    saved_charity = serializers.IntegerField(min_value=1)

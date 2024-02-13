@@ -12,6 +12,7 @@ from .models import User
 from .serializers import Onboarding_serializer
 from .serializers import Updated_donated_charities_serializer
 from .serializers import User_serializer
+from .serializers import Saved_charities_serializer
 
 config={
     "apiKey": config("apiKey"),
@@ -110,8 +111,8 @@ def my_charities(request, user_id):
         if ref is not None:
             user_data = ref.val()
             if user_data:
-                fav = user_data.get('fav_charities')
-                return Response(fav)
+                save = user_data.get('saved_charities')
+                return Response(save)
             else:
                 return Response({"error": "No Favourite Charity data for User"}, status=404)
         else:
@@ -119,6 +120,31 @@ def my_charities(request, user_id):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
     
+@api_view(['POST'])
+def saved_charities(request, user_id):
+    try:
+        serializer = Saved_charities_serializer(data=request.data)
+
+        if serializer.is_valid():
+            saved_charity_id = serializer.validated_data['saved_charity']
+
+            saved_charities = database.child('users').child(user_id).child('saved_charities').get().val()
+            if saved_charities:
+                saved_charities_list = saved_charities if isinstance(saved_charities, list) else [saved_charities]
+                if saved_charity_id in saved_charities_list:
+                    return Response({"saved_charities": saved_charities_list})
+                saved_charities_list.append(saved_charity_id)
+            else:
+                saved_charities_list = [saved_charity_id]
+
+            database.child('users').child(user_id).child('saved_charities').set(saved_charities_list)
+            return Response({"saved_charities": saved_charities_list})
+
+        else:
+            return Response({"error": serializer.errors}, status=400)    
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
 @api_view(['GET'])
 # Return all charities user donated to
 def my_donated_charities(request, user_id):
