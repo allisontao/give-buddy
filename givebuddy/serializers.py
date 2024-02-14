@@ -12,7 +12,7 @@ class Onboarding_serializer(serializers.Serializer):
 
 class Updated_donated_charities_serializer(serializers.Serializer):
     donated_charity_id = serializers.IntegerField(min_value=1)
-    donated_amount = serializers.IntegerField(min_value=1)
+    donated_amount = serializers.IntegerField(min_value=1, required=False)
 
 class User_serializer(serializers.Serializer):
     user_uid = serializers.CharField(max_length=255)
