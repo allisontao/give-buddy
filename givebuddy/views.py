@@ -168,18 +168,35 @@ def my_donated_charities(request, user_id):
 def update_donated_charities(request, user_id):
     try:
         update_donated_serializer = Updated_donated_charities_serializer(data=request.data)
-        # validate request data before updating database using serializer
         if update_donated_serializer.is_valid():
-            # obtain user's current donated to list
-            current_list = database.child('users').child(user_id).child('donated_to').get().val() or []
-            # user input
-            insert_id = update_donated_serializer.validated_data.get('donated_charity_id')
-            insert_amount = update_donated_serializer.validated_data.get('donated_amount')
-            insert_list = [insert_id, insert_amount]
-            final_list = current_list + [insert_list]
-            # update database
-            database.child('users').child(user_id).child('donated_to').set(final_list)
-            return Response({'donated_to': final_list})
+            donated_charity_id = update_donated_serializer.validated_data.get('donated_charity_id')
+            donated_amount = update_donated_serializer.validated_data.get('donated_amount')
+
+            current_dict = database.child('users').child(user_id).child('donated_to').get().val() or {}
+            print("CURRENT DICT", current_dict)
+
+            for i in range(len(current_dict)):
+                if donated_charity_id == current_dict[i][0]:
+                    cur = current_dict[i]
+                    if len(cur) == 1:
+                        cur.append(donated_amount)
+                        current_dict.pop(i)
+                        current_dict.append(cur)
+                        print(current_dict)
+                        database.child('users').child(user_id).child('donated_to').set(current_dict)
+                        return Response({'donated_to': current_dict})
+                    else:
+                        cur[1] += donated_amount
+                        current_dict.pop(i)
+                        current_dict.append(cur)
+                        print(current_dict)
+                        database.child('users').child(user_id).child('donated_to').set(current_dict)
+                        return Response({'donated_to': current_dict})
+
+            current_dict.append([donated_charity_id, donated_amount])
+
+            database.child('users').child(user_id).child('donated_to').set(current_dict)
+            return Response({'donated_to': current_dict})
         else:
             return Response(update_donated_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
