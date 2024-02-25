@@ -59,72 +59,72 @@
 #     "education": {"funding": [("id8", 11), ("id9", 12), ("id10", 10)], "school": [("id12", 4)]},
 # }
 
-def generate_results(matched_charities):
-    result_ids = []
-    processed_ids = set()
+# def generate_results(matched_charities):
+#     result_ids = []
+#     processed_ids = set()
 
-    while matched_charities:
-        # Iteration 1: Add the id with the highest score for each category
-        for category, subcategories in matched_charities.items():
-            if not any(subcategories.values()):
-                continue
+#     while matched_charities:
+#         # Iteration 1: Add the id with the highest score for each category
+#         for category, subcategories in matched_charities.items():
+#             if not any(subcategories.values()):
+#                 continue
 
-            max_score_id = max((item for sublist in subcategories.values() for item in sublist), key=lambda x: x[1], default=(None, 0))
-            if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
-                result_ids.append(max_score_id[0])
-                processed_ids.add(max_score_id[0])
+#             max_score_id = max((item for sublist in subcategories.values() for item in sublist), key=lambda x: x[1], default=(None, 0))
+#             if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
+#                 result_ids.append(max_score_id[0])
+#                 processed_ids.add(max_score_id[0])
 
-        # Check if all subcategories have been processed
-        if all(not any(subcategories.values()) for subcategories in matched_charities.values()):
-            break
+#         # Check if all subcategories have been processed
+#         if all(not any(subcategories.values()) for subcategories in matched_charities.values()):
+#             break
 
-        # Iteration 2 and 3: Add the id with the highest score for each subcategory
-        for category, subcategories in matched_charities.items():
-            if not any(subcategories.values()):
-                continue
+#         # Iteration 2 and 3: Add the id with the highest score for each subcategory
+#         for category, subcategories in matched_charities.items():
+#             if not any(subcategories.values()):
+#                 continue
 
-            for subcategory, ids in subcategories.items():
-                if not ids:
-                    continue
+#             for subcategory, ids in subcategories.items():
+#                 if not ids:
+#                     continue
 
-                max_score_id = max(ids, key=lambda x: x[1], default=(None, 0))
-                if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
-                    result_ids.append(max_score_id[0])
-                    processed_ids.add(max_score_id[0])
+#                 max_score_id = max(ids, key=lambda x: x[1], default=(None, 0))
+#                 if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
+#                     result_ids.append(max_score_id[0])
+#                     processed_ids.add(max_score_id[0])
 
-        # Check if all subcategories have been processed before moving to Iteration 4
-        if all(not any(subcategories.values()) for subcategories in matched_charities.values()):
-            break
+#         # Check if all subcategories have been processed before moving to Iteration 4
+#         if all(not any(subcategories.values()) for subcategories in matched_charities.values()):
+#             break
 
-        # Iteration 4: Add the id with the next highest score in the same subcategory
-        for category, subcategories in matched_charities.items():
-            for subcategory, ids in subcategories.items():
-                if not ids:
-                    continue
+#         # Iteration 4: Add the id with the next highest score in the same subcategory
+#         for category, subcategories in matched_charities.items():
+#             for subcategory, ids in subcategories.items():
+#                 if not ids:
+#                     continue
 
-                max_score_id = max(ids, key=lambda x: x[1], default=(None, 0))
-                if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
-                    result_ids.append(max_score_id[0])
-                    processed_ids.add(max_score_id[0])
+#                 max_score_id = max(ids, key=lambda x: x[1], default=(None, 0))
+#                 if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
+#                     result_ids.append(max_score_id[0])
+#                     processed_ids.add(max_score_id[0])
 
-        # Remove processed ids from the data structure
-        for category, subcategories in matched_charities.items():
-            for subcategory, ids in subcategories.items():
-                matched_charities[category][subcategory] = [(item[0], item[1]) for item in ids if item[0] not in processed_ids]
+#         # Remove processed ids from the data structure
+#         for category, subcategories in matched_charities.items():
+#             for subcategory, ids in subcategories.items():
+#                 matched_charities[category][subcategory] = [(item[0], item[1]) for item in ids if item[0] not in processed_ids]
 
-        # Remove empty subcategories and categories
-        matched_charities = {category: subcategories for category, subcategories in matched_charities.items() if any(subcategories.values())}
+#         # Remove empty subcategories and categories
+#         matched_charities = {category: subcategories for category, subcategories in matched_charities.items() if any(subcategories.values())}
 
-        # Handle the case where all subcategories within a category have already been added
-        for category, subcategories in matched_charities.items():
-            if all(not ids for ids in subcategories.values()):
-                all_ids = [item for sublist in subcategories.values() for item in sublist]
-                max_score_id = max(all_ids, key=lambda x: x[1], default=(None, 0))
-                if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
-                    result_ids.append(max_score_id[0])
-                    processed_ids.add(max_score_id[0])
+#         # Handle the case where all subcategories within a category have already been added
+#         for category, subcategories in matched_charities.items():
+#             if all(not ids for ids in subcategories.values()):
+#                 all_ids = [item for sublist in subcategories.values() for item in sublist]
+#                 max_score_id = max(all_ids, key=lambda x: x[1], default=(None, 0))
+#                 if max_score_id[0] is not None and max_score_id[0] not in processed_ids:
+#                     result_ids.append(max_score_id[0])
+#                     processed_ids.add(max_score_id[0])
 
-    return result_ids
+#     return result_ids
 
 
 # def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province, city=None, user_categories=[], user_subcategories=[]):
@@ -235,7 +235,7 @@ def generate_results(matched_charities):
     return result_ids
 
 
-def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province, city=None, user_categories=[], user_subcategories=[]):
+def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province=None, city=None, user_categories=[], user_subcategories=[]):
     matched_charities = {}
     province_matched_charities = {}
     non_matched_charities = {}
@@ -259,9 +259,9 @@ def match_charities(charities, ft_ranking, rr_ranking, ctc_ranking, province, ci
         charity_tuple = (charity_id, score)
 
         # Check if province matches
-        if province.lower() == charity['province'].lower():
+        if province.lower().strip() == charity['province'].lower().strip():
             # Check if city matches
-            if city and city.lower() == charity.get('city', '').lower():
+            if city and city.lower().strip() == charity.get('city', '').lower().strip():
                 if category not in matched_charities:
                     matched_charities[category] = {}
                 
