@@ -183,7 +183,7 @@ def update_donated_charities(request, user_id):
             donated_charity_id = update_donated_serializer.validated_data.get('donated_charity_id')
             donated_amount = update_donated_serializer.validated_data.get('donated_amount')
 
-            current_dict = database.child('users').child(user_id).child('donated_to').get().val() or {}
+            current_dict = database.child('users').child(user_id).child('donated_to').get().val() or []
             print("CURRENT DICT", current_dict)
 
             for i in range(len(current_dict)):
