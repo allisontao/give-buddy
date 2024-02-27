@@ -79,15 +79,20 @@ def onboarding(request, user_id):
       if serializer.is_valid():
           user_data = serializer.validated_data
           print(user_data)
+          user_province = database.child('users').child(user_id).child('user_province').get().val()
+          print('THIS IS USER PROVINCE', user_province)
+          user_city = database.child('users').child(user_id).child('user_city').get().val()
+          print('THIS IS USER CITY', user_city)
           charity_list = database.child('charities').get().val()
           user_selections = {
               'user_categories': user_data['categories'],
               'user_subcategories': user_data['subcategories'],
-              'province': user_data['province'],
               'ft_ranking': user_data['ft_ranking'],
               'rr_ranking': user_data['rr_ranking'],
               'ctc_ranking': user_data['ctc_ranking'],
-              'charities': charity_list
+              'charities': charity_list,
+              'province': user_province,
+              'city': user_city
           }
           user_matched_charities = match_charities(**user_selections)
           matched_charities_json = {
@@ -250,6 +255,8 @@ def user_registration(request):
                 'email': validated_data['email'],
                 'first_name': validated_data['first_name'],
                 'last_name': validated_data['last_name'],
+                'user_province': validated_data['user_province'],
+                'user_city': validated_data['user_city'],
                 'user_uid': validated_data['user_uid'],
             }
 
