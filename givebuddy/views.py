@@ -84,6 +84,12 @@ def onboarding(request, user_id):
           user_city = database.child('users').child(user_id).child('user_city').get().val()
           print('THIS IS USER CITY', user_city)
           charity_list = database.child('charities').get().val()
+          if user_province is None:
+              user_province = "ON"
+
+          if user_city is None:
+              user_city = "Toronto"
+              
           user_selections = {
               'user_categories': user_data['categories'],
               'user_subcategories': user_data['subcategories'],
