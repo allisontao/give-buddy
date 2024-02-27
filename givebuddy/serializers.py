@@ -16,8 +16,8 @@ class User_serializer(serializers.Serializer):
     user_uid = serializers.CharField(max_length=255)
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
-    user_province = serializers.CharField(max_length=255, required=False)
-    user_city = serializers.CharField(max_length=255, required=False)
+    user_province = serializers.CharField(required=False, max_length=100, allow_blank=True)
+    user_city = serializers.CharField(required=False, max_length=100, allow_blank=True)
     email = serializers.EmailField()
 
 class Saved_charities_serializer(serializers.Serializer):
